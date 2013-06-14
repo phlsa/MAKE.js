@@ -6,31 +6,10 @@
 <script type="text/javascript" src="../MAKE.js"></script>
 <script type="text/javascript">
 WhenThe( window ).is( "ready" ).perform( function() {
-/*
-  DefineState( "standard" ).as({
-    ".start-screen": {
-      classes: ["hidden"]
-    },
-    ".box": {
-      classes: []
-    }
-  })
-
-  DefineState( "activated" ).as({
-    ".start-screen": {
-      classes: [],
-      css: {
-        'opacity':1
-      }
-    },
-    ".box": {
-      classes: ["box-in"]
-    }
-  })
-*/
-  Make( ".button" ).respondTo( "click" ).withThe( function() {
+  Make( ".button" ).respondTo( "click" ).with( function() {
     Make( ".start-screen" ).appear().withAnimation()
-    Make( ".box" ).animate().to( "box-in" )
+    //Make( ".box" ).animate().to( "box-in" )
+    Make( ".box" ).animate().to({ '-webkit-transform': 'rotate( 45deg )' })
   })
 })
 </script>

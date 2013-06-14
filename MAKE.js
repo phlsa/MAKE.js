@@ -23,16 +23,17 @@ var MAKE = {
     // animation-related things
     this.animation = {
       enabled: false,
-      fromClasses: [],
-      toClasses: []
+      fromProperties: [],
+      toProperties: [],
+      duration: 500
     }
     this.addAnimationPropertiesTo = function( elem ) {
       MAKE.$( elem ).css({
-        '-webkit-transition': 'all 0.5s ease',
-        '-moz-transition': 'all 0.5s ease',
-        '-ms-transition': 'all 0.5s ease',
-        '-o-transition': 'all 0.5s ease',
-        'transition': 'all 0.5s ease',
+        '-webkit-transition': 'all '+ (self.animation.duration/1000.0) +'s ease',
+        '-moz-transition': 'all '+ (self.animation.duration/1000.0) +'s ease',
+        '-ms-transition': 'all '+ (self.animation.duration/1000.0) +'s ease',
+        '-o-transition': 'all '+ (self.animation.duration/1000.0) +'s ease',
+        'transition': 'all '+ (self.animation.duration/1000.0) +'s ease',
       })
     }
     this.removeAnimationPropertiesFrom = function( elem ) {
@@ -44,26 +45,16 @@ var MAKE = {
         'transition': 'none',
       })
     }
-    this.animateProperties = function( from, to ) {
-      self.element().css( from )
-      self.addAnimationPropertiesTo( self.element() )
-      _.defer( function() {
-        self.element().css( to )
-        _.delay( function() {
-          self.removeAnimationPropertiesFrom( self.element() )
-        }, 500)
-      })
-    }
 
-    this.animateClasses = function() {
-      _.each( self.animation.fromClasses, function( item ) {
-        self.element().addClass( item )
+    this.animateProperties = function() {
+      _.each( self.animation.fromProperties, function( item ) {
+        MAKE.helper.addProperties( self.element(), item )
       })
 
       self.addAnimationPropertiesTo( self.element() )
       _.defer( function() {
-        _.each( self.animation.toClasses, function( item ) {
-          self.element().addClass( item )
+        _.each( self.animation.toProperties, function( item ) {
+          MAKE.helper.addProperties( self.element(), item )
         })
       })
     }
@@ -74,18 +65,24 @@ var MAKE = {
       return self
     }
     this.is = this.respondTo
+    this.becomes = this.respondTo
+    this.does = this.respondTo
+    this.did = this.respondTo
 
     this.withThe = function( action ) {
       self.element().on( self.events, action )
       return self
     }
     this.perform = this.withThe
+    this.with = this.withThe
 
     this.appear = function() {
       self.finalActions.push( function() {
         self.element().show()
         if ( self.animation.enabled ) {
-          self.animateProperties({ 'opacity':0 }, { 'opacity':1 })
+          self.animation.fromProperties.push({ 'opacity': 0 })
+          self.animation.toProperties.push({ 'opacity': 0.5 })
+          self.animateProperties()
         }
       })
       return self
@@ -98,12 +95,14 @@ var MAKE = {
     this.animate = this.withAnimation
 
     this.to = function( selector ) {
-      self.animation.toClasses.push( selector )
+      // can take either a string (class) or an object (css properties)
+      self.animation.toProperties.push( selector )
+
       self.finalActions.push( function() {
         if ( self.animation.enabled ) {
-          self.animateClasses()
+          self.animateProperties()
         } else {
-          self.element().addClass( selector )
+          MAKE.helper.addProperties( self.element(), selector )
         }
       })
       return self
@@ -114,6 +113,16 @@ var MAKE = {
     var base = new MAKE.Base()
     base.selector = selector
     return base
+  },
+
+  helper: {
+    addProperties: function( elem, selector ) {
+      if ( typeof selector === 'string' ) {
+        elem.addClass( selector )
+      } else if ( typeof selector === 'object' ) {
+        elem.css( selector )
+      }
+    }
   }
 }
 
