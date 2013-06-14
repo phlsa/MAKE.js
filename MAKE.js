@@ -81,7 +81,7 @@ var MAKE = {
         self.element().show()
         if ( self.animation.enabled ) {
           self.animation.fromProperties.push({ 'opacity': 0 })
-          self.animation.toProperties.push({ 'opacity': 0.5 })
+          self.animation.toProperties.push({ 'opacity': 1 })
           self.animateProperties()
         }
       })
