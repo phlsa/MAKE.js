@@ -88,6 +88,22 @@ var MAKE = {
       return self
     }
 
+    this.disappear = function() {
+      self.finalActions.push( function() {
+        if ( self.animation.enabled ) {
+          self.animation.fromProperties.push({ 'opacity': 1 })
+          self.animation.toProperties.push({ 'opacity': 0 })
+          self.animateProperties()
+          _.delay( function() {
+            self.element().hide()
+          }, self.animation.duration )
+        } else {
+          self.element().hide()
+        }
+      })
+      return self
+    }
+
     this.withAnimation = function() {
       self.animation.enabled = true
       return self

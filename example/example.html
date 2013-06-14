@@ -9,8 +9,9 @@ WhenThe( window ).is( "ready" ).perform( function() {
   Make( ".button" ).respondTo( "click" ).with( function() {
     Make( ".start-screen" ).appear().withAnimation()
     Make( ".box" ).animate().to( "box-in" ).andThen( function() {
-      console.log("defered")
-      Make( ".box" ).animate().to({ '-webkit-transform': 'rotate( 120deg )' })
+      Make( ".box" ).animate().to({ '-webkit-transform': 'rotate( 120deg )' }).andThen( function() {
+        Make( ".start-screen" ).disappear().withAnimation()
+      })
     })
   })
 })
