@@ -107,6 +107,17 @@ var MAKE = {
       })
       return self
     }
+
+    this.andThen = function( action ) {
+      self.finalActions.push( function() {
+        if ( self.animation.enabled ) {
+          _.delay( action, self.animation.duration )
+        } else {
+          action()
+        }
+      })
+      return self
+    }
   },
 
   init: function( selector ) {
