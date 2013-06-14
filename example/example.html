@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="underscore-min.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../MAKE.js"></script>
+<script type="text/javascript">
+WhenThe( window ).is( "ready" ).perform( function() {
+/*
+  DefineState( "standard" ).as({
+    ".start-screen": {
+      classes: ["hidden"]
+    },
+    ".box": {
+      classes: []
+    }
+  })
+
+  DefineState( "activated" ).as({
+    ".start-screen": {
+      classes: [],
+      css: {
+        'opacity':1
+      }
+    },
+    ".box": {
+      classes: ["box-in"]
+    }
+  })
+*/
+  Make( ".button" ).respondTo( "click" ).withThe( function() {
+    Make( ".start-screen" ).appear().withAnimation()
+    Make( ".box" ).animate().to( "box-in" )
+  })
+})
+</script>
+<style type="text/css" media="all">
+  .hidden {
+    display:none;
+  }
+
+  .box {
+    width: 100px;
+    height: 100px;
+    position:absolute;
+    background:red;
+    top:100px;
+  }
+  
+  .box-in {
+    -webkit-transform: translate( 300px, 100px ) rotate( 30deg );
+  }
+</style>
+</head>
+<body>
+<div class="button">A Button</div>
+<div class="start-screen hidden">This is the start screen</div>
+
+<div class="box"></div>
+</body>
+</html>
+
